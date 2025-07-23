@@ -1,0 +1,15 @@
+# Core functionality
+pandas==2.2.2
+python-dateutil==2.9.0
+pydantic==2.6.4
+rich==13.7.1
+
+# Optional: Timer & audio (future feature)
+APScheduler==3.10.4
+simpleaudio==1.0.4
+
+# Dev tools
+pytest==8.2.2
+black==24.4.2
+isort==5.13.2
+flake8==7.0.0
