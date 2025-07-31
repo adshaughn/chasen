@@ -1,5 +1,8 @@
+from chasen_app import ChasenApp
+
 def main():
-    print("Hello from chasen!")
+    app = ChasenApp()
+    app.run()
 
 
 if __name__ == "__main__":

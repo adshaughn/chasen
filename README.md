@@ -70,7 +70,7 @@ Packages
 
 ## Development Roadmap
 
-Initial developement will be focused on the logging features.
+Initial development will be focused on the logging features.
 
 ## Licenses
 
