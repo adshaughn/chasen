@@ -1,5 +1,6 @@
 from chasen_app import ChasenApp
 
+
 def main():
     app = ChasenApp()
     app.run()
