@@ -4,9 +4,9 @@ from timer import TeaTimer
 
 
 class ChasenApp:
-    def __init__(self):
+    def __init__(self, conn):
         print("ChasenApp starting...")
-        self.inventory = TeaInventory()
+        self.inventory = TeaInventory(conn)
         self.journal = TeaJournal()
         self.timer = TeaTimer()
 

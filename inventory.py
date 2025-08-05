@@ -1,10 +1,6 @@
-import sqlite3
-
-
 class TeaInventory:
-    def __init__(self, db_path="data/chasen.db"):
-        self.dbpath = db_path
-        self.conn = sqlite3.connect(db_path)
+    def __init__(self, conn):
+        self.conn = conn
         self.cursor = self.conn.cursor()
         self.create_stock_table()
         print("TeaInventory starting...")
@@ -126,3 +122,4 @@ class TeaInventory:
             print(
                 f" - {name} ({primary_type}) : {recommended_amount_tea}g with {recommended_water_ml}ml water at {recommended_water_temp}°C for {recommended_time_secs} sec."
             )
+            return teas
