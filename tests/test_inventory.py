@@ -1,6 +1,6 @@
 import unittest
 import sqlite3
-from inventory import TeaInventory
+from chasen.inventory import TeaInventory
 
 
 class TestTeaInventory(unittest.TestCase):

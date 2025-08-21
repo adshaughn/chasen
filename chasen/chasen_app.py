@@ -1,6 +1,6 @@
-from inventory import TeaInventory
-from journal import TeaJournal
-from timer import TeaTimer
+from chasen.inventory import TeaInventory
+from chasen.journal import TeaJournal
+from chasen.timer import TeaTimer
 
 
 class ChasenApp:
