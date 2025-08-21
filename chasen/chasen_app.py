@@ -18,7 +18,8 @@ class ChasenApp:
         #     recommended_amount_tea=5,
         #     recommended_water_ml=100,
         #     recommended_water_temp=95,
-        #     recommended_time_secs=60
+        #     recommended_time_secs=60,
+        #     current_stock=20
         # )
 
         self.inventory.list_teas()
