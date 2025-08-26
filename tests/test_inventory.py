@@ -1,13 +1,11 @@
 import pytest
-from tests.helpers import test_add_tea_helper
+from tests.helpers import test_add_tea_helper, test_remove_tea_helper
 
 
 def test_create_stock_table(inventory, conn):
     """Test that the stock table was actually created"""
     cursor = conn.cursor()
-    cursor.execute(
-        "select name from sqlite_master where type='table' and name='stock';"
-    )
+    cursor.execute("select name from sqlite_master where type='table' and name='stock';")
     assert cursor.fetchone() is not None
 
 
@@ -101,10 +99,48 @@ def test_add_tea(inventory):
 #     self.assertEqual(True, False)  # add assertion here
 
 
-# def test_remove_tea(self):
-#     self.inventory.remove_tea(
-#
-#     )
+# Remove tea test
+# Valid case - removes tea with name match and is case-insensitive
+# Valid - table does not contain tea
+
+
+def test_remove_tea(inventory, conn):
+
+    # Step 1 - insert tea into test database
+    cursor = conn.cursor()
+    cursor.execute(
+        """INSERT INTO stock (
+            name, 
+            primary_type, 
+            subtype, 
+            source, 
+            recommended_amount_tea, 
+            recommended_water_ml, 
+            recommended_water_temp, 
+            recommended_time_secs, 
+            current_stock
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ;
+            """,
+        (
+            "Crimson Pigeon",
+            "Oolong",
+            "Oriental Beauty",
+            "Taiwan Sourcing",
+            7,
+            200,
+            195,
+            120,
+            80,
+        ),
+    )
+    conn.commit()
+
+    # Step 2 - test removal
+    inventory.remove_tea("Crimson Pigeon")
+
+    cursor.execute("select count(*) from stock where name = 'Crimson Pigeon';")
+    assert cursor.fetchone()[0] == 0
+
 
 # def test_list_teas(self):
 #     teas = self.inventory.list_teas()

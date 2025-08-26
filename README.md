@@ -32,10 +32,10 @@ There are two tables in Chasen:
 - Subtype (string)
 - Source (string)
 - Quantity on hand (int)
-- Recommended water (int?)
-- Recommended amount (int?)
+- Recommended water (int)
+- Recommended amount (int)
 - Recommended steeping temperature (int)
-- Recommended steeping time (time)
+- Recommended steeping time (int)
 
 The user inputs string data through a guided flow which is added as an entry into the log table.
 
@@ -51,26 +51,58 @@ has never tried them. ("Would you like to have something familiar or something n
 ## Tech Stack
 
 Python 3.11
-Packages
 
+## Packages
+
+### Runtime
+- tabulate==0.9.0
+
+### Development
+- pytest==8.2.2
+- black==24.4.2
+- isort==5.13.2
+- flake8==7.0.0
+
+### Planned (future features)
 - pandas==2.2.2
 - python-dateutil==2.9.0
 - pydantic==2.6.4
 - rich==13.7.1
 - APScheduler==3.10.4
 - simpleaudio==1.0.4
-- pytest==8.2.2
-- black==24.4.2
-- isort==5.13.2
-- flake8==7.0.0
 
 ## Installation Instructions and User Guide
 
+uv pip install -e .
+
 ## Structure
+
+chasen/
+├── chasen/                  # Main source code
+│   ├── init.py
+│   ├── chasen_app.py        # Entry point for the application
+│   ├── inventory.py         # Tea inventory management (SQLite + tabulate)
+│   ├── journal.py           # Tea journal logging (WIP)
+│   ├── timer.py             # Tea brewing timer (WIP)
+
+├── data/
+│   └── chasen.db            # SQLite database file
+│
+├── tests/                   # Unit tests (pytest) (mirrors code structure)
+│   ├── init.py
+│   ├── test_inventory.py
+│   └── test_journal.py
+│
+├── main.py                  # CLI launcher for Chasen
+├── pyproject.toml           # Project dependencies & config (uv/black/pytest)
+├── README.md                # Project documentation
+└── .gitignore               # Git ignore rules
 
 ## Development Roadmap
 
 Initial development will be focused on the logging features.
+
+Currently working on implementing the stock table with associated tests.
 
 ## Licenses
 

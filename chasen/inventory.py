@@ -105,9 +105,7 @@ class TeaInventory:
 
         # Step 3: Check for duplicates
 
-        self.cursor.execute(
-            "SELECT id FROM stock WHERE LOWER(name) = LOWER(?)", (name,)
-        )
+        self.cursor.execute("SELECT id FROM stock WHERE LOWER(name) = LOWER(?)", (name,))
         if self.cursor.fetchone():
             print(f"{name} already exists in inventory")
             return
@@ -145,16 +143,12 @@ class TeaInventory:
     def remove_tea(self, name):
         """Removes a tea with the name selected from the inventory table"""
 
-        self.cursor.execute(
-            "SELECT id FROM stock WHERE LOWER(name) = LOWER(?)", (name,)
-        )
+        self.cursor.execute("SELECT id FROM stock WHERE LOWER(name) = LOWER(?)", (name,))
         if not self.cursor.fetchone():
             print(f"{name} does not exist in inventory")
             return
 
-        self.cursor.execute(
-            """DELETE FROM stock WHERE LOWER(name) = LOWER(?)""", (name,)
-        )
+        self.cursor.execute("""DELETE FROM stock WHERE LOWER(name) = LOWER(?)""", (name,))
         self.conn.commit()
         print(f"{name} removed from stock table")
 
