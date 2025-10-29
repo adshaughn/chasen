@@ -209,10 +209,10 @@ def test_list_teas_prints_table(inventory, conn, capsys):
 def test_list_teas_empty_table(inventory, capsys):
     """If the table is empty, list_teas should return an empty list and print a message when print_table=True."""
     teas = inventory.list_teas()
-    # 1️⃣ Should return an empty list
+    # Should return an empty list
     assert teas == []
 
-    # 2️⃣ Should print a friendly message if print_table=True
+    # Should print a friendly message if print_table=True
     inventory.list_teas(print_table=True)
     out = capsys.readouterr().out
     assert "No teas in stock table" in out
