@@ -152,8 +152,15 @@ class TeaInventory:
         self.conn.commit()
         print(f"{name} removed from stock table")
 
-    def list_teas(self):
-        """Function that lists all rows in the tea inventory table (table name: stock)"""
+    def list_teas(self, print_table: bool = False):
+        """Return all teas from the stock table; optionally print a table.
+
+        Args:
+            print_table (bool): If True, prints a formatted table to stdout.
+
+        Returns:
+            list[tuple]: Rows returned by the SELECT in column order.
+        """
         self.cursor.execute(
             """
                             SELECT
@@ -171,20 +178,21 @@ class TeaInventory:
         )
         teas = self.cursor.fetchall()
 
-        if not teas:
-            print("No teas in stock table")
-            return
+        if print_table:
+            if not teas:
+                print("No teas in stock table")
+            else:
+                headers = [
+                    "Name",
+                    "Primary Type",
+                    "Subtype",
+                    "Source",
+                    "Amount (g)",
+                    "Water (mL)",
+                    "Temp (°C)",
+                    "Time (s)",
+                    "Stock (g)",
+                ]
+                print(tabulate(teas, headers=headers, tablefmt="pretty"))
 
-        headers = [
-            "Name",
-            "Primary Type",
-            "Subtype",
-            "Source",
-            "Amount (g)",
-            "Water (mL)",
-            "Temp (°C)",
-            "Time (s)",
-            "Stock (g)",
-        ]
-
-        print(tabulate(teas, headers=headers, tablefmt="pretty"))
+        return teas

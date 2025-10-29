@@ -9,19 +9,28 @@ def test_create_stock_table(inventory, conn):
     assert cursor.fetchone() is not None
 
 
-# def test_delete_stock_table(self):
-#     cursor = self.conn.cursor()
-#     cursor.execute()
+def test_delete_stock_table(inventory, conn):
+    """Tests that the stock table was actually deleted"""
+    # Step one - create temporary table using same schema as primary stock table
+    cursor = conn.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS stock (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                primary_type TEXT NOT NULL,
+                subtype TEXT NOT NULL,
+                source TEXT NOT NULL,
+                recommended_amount_tea REAL NOT NULL,
+                recommended_water_ml  REAL NOT NULL,
+                recommended_water_temp INTEGER NOT NULL,
+                recommended_time_secs INTEGER NOT NULL,
+                current_stock INTEGER NOT NULL);
+                   """
+                   )
+    # Step two - drop table and verify
 
-# below is deprecated
-# def test_add_tea(inventory):
-#     # First test valid case
-#     inventory.add_tea(
-#         "Overlord", "Oolong", "High Mountain", "Taiwan Sourcing", 5, 200, 90, 120
-#     )
-#     teas = self.inventory.list_teas()
-#     expected_row = ("Overlord", "Oolong", "High Mountain", "Taiwan Sourcing", 5, 200, 90, 120)
-#     self.assertIn(expected_row, teas)
+    inventory.delete_stock_table()
+
+    cursor.execute("select name from sqlite_master where type='table' and name='stock';")
 
 
 def test_add_tea(inventory):
@@ -95,15 +104,6 @@ def test_add_tea(inventory):
     test_add_tea_helper(inventory, test_data)
 
 
-# def test_list_teas(self):
-#     self.assertEqual(True, False)  # add assertion here
-
-
-# Remove tea test
-# Valid case - removes tea with name match and is case-insensitive
-# Valid - table does not contain tea
-
-
 def test_remove_tea(inventory, conn):
 
     # Step 1 - insert tea into test database
@@ -142,5 +142,66 @@ def test_remove_tea(inventory, conn):
     assert cursor.fetchone()[0] == 0
 
 
-# def test_list_teas(self):
-#     teas = self.inventory.list_teas()
+def test_list_teas_returns_rows(inventory, conn):
+    cursor = conn.cursor()
+    cursor.execute(
+        """INSERT INTO stock (
+        name, 
+        primary_type, 
+        subtype, 
+        source, 
+        recommended_amount_tea, 
+        recommended_water_ml, 
+        recommended_water_temp, 
+        recommended_time_secs, 
+        current_stock
+        ) VALUES (?,?,?,?,?,?,?,?,?)""",
+        (
+            "Crimson Pigeon",
+            "Oolong",
+            "Oriental Beauty",
+            "Taiwan Sourcing",
+            5.0,
+            195.0,
+            200,
+            120,
+            80)
+        )
+    conn.commit()
+
+    teas = inventory.list_teas()
+    assert len(teas) == 1
+    assert teas[0][0] == "Crimson Pigeon" # verifying first column is name
+
+def test_list_teas_prints_table(inventory, conn, capsys):
+    cursor = conn.cursor()
+    cursor.execute(
+            """INSERT INTO stock(
+            name,
+            primary_type, 
+            subtype, 
+            source, 
+            recommended_amount_tea, 
+            recommended_water_ml, 
+            recommended_water_temp, 
+            recommended_time_secs, 
+            current_stock
+            ) VALUES (?,?,?,?,?,?,?,?,?)""",
+            (
+                "Crimson Pigeon",
+                "Oolong",
+                "Oriental Beauty",
+                "Taiwan Sourcing",
+                8.0,
+                195.0,
+                95,
+                120,
+                80
+            )
+    )
+    conn.commit()
+    inventory.list_teas(print_table=True)
+    out = capsys.readouterr().out
+
+    assert "Crimson Pigeon" in out
+    assert "Primary Type" in out
